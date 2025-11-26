@@ -1,0 +1,99 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap');
+
+@layer base {
+    :root {
+        --luxury-black: #0a0a0a;
+        --luxury-gold: #c9a961;
+    }
+
+    body {
+        background-color: var(--luxury-black);
+        color: #a0a0a0;
+        font-family: "Inter", sans-serif;
+        font-weight: 300;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: "Playfair Display", serif;
+        color: #ffffff;
+        font-weight: 500;
+    }
+}
+
+@layer utilities {
+    .bg-luxury-black {
+        background-color: var(--luxury-black);
+    }
+
+    .bg-luxury-charcoal {
+        background-color: #141414;
+    }
+
+    .text-luxury-gold {
+        color: var(--luxury-gold);
+    }
+
+    .border-luxury-gold {
+        border-color: var(--luxury-gold);
+    }
+
+    .font-serif {
+        font-family: "Playfair Display", serif;
+    }
+}
+
+@layer components {
+    .glass-panel {
+        background-color: rgba(20, 20, 20, 0.6);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .glass-card {
+        background-color: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        transition: all 400ms ease;
+    }
+
+    .glass-card:hover {
+        background-color: rgba(255, 255, 255, 0.04);
+        border-color: rgba(201, 169, 97, 0.3);
+    }
+
+    .btn-gold {
+        padding: 1rem 2.5rem;
+        background-color: var(--luxury-gold);
+        color: #000;
+        font-weight: 500;
+        font-size: 0.875rem;
+        letter-spacing: 0.05em;
+        transition: all 300ms ease;
+    }
+
+    .btn-gold:hover {
+        background-color: #d4b56f;
+        transform: translateY(-1px);
+    }
+
+    .btn-outline {
+        padding: 1rem 2.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        font-weight: 400;
+        font-size: 0.875rem;
+        letter-spacing: 0.05em;
+        transition: all 300ms ease;
+    }
+
+    .btn-outline:hover {
+        border-color: var(--luxury-gold);
+        color: var(--luxury-gold);
+    }
+}

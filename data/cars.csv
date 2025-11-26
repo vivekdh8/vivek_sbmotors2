@@ -1,0 +1,4 @@
+id,make,model,year,price,mileage,status
+car-1,Toyota,Corolla,2019,800000,35000,available
+car-2,Honda,City,2018,700000,42000,available
+car-3,Hyundai,Creta,2020,1200000,22000,available
