@@ -5,11 +5,15 @@
     :root {
         --luxury-black: #0a0a0a;
         --luxury-gold: #c9a961;
+        --luxury-burgundy: #2d1b1e;
+        --luxury-deep-red: #1a0f11;
     }
 
     body {
-        background-color: var(--luxury-black);
-        color: #a0a0a0;
+        background: linear-gradient(135deg, #2d1b1e 0%, #1a0f11 50%, #0d0607 100%);
+        background-attachment: fixed;
+        min-height: 100vh;
+        color: #d4c5b9;
         font-family: "Inter", sans-serif;
         font-weight: 300;
         -webkit-font-smoothing: antialiased;
@@ -22,7 +26,7 @@
     h5,
     h6 {
         font-family: "Playfair Display", serif;
-        color: #ffffff;
+        color: #f5e6d3;
         font-weight: 500;
     }
 }
@@ -51,26 +55,26 @@
 
 @layer components {
     .glass-panel {
-        background-color: rgba(20, 20, 20, 0.6);
+        background-color: rgba(45, 27, 30, 0.7);
         backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(201, 169, 97, 0.1);
     }
 
     .glass-card {
-        background-color: rgba(255, 255, 255, 0.02);
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        background-color: rgba(45, 27, 30, 0.3);
+        border: 1px solid rgba(201, 169, 97, 0.15);
         transition: all 400ms ease;
     }
 
     .glass-card:hover {
-        background-color: rgba(255, 255, 255, 0.04);
-        border-color: rgba(201, 169, 97, 0.3);
+        background-color: rgba(45, 27, 30, 0.5);
+        border-color: rgba(201, 169, 97, 0.4);
     }
 
     .btn-gold {
         padding: 1rem 2.5rem;
         background-color: var(--luxury-gold);
-        color: #000;
+        color: #1a0f11;
         font-weight: 500;
         font-size: 0.875rem;
         letter-spacing: 0.05em;
@@ -80,12 +84,13 @@
     .btn-gold:hover {
         background-color: #d4b56f;
         transform: translateY(-1px);
+        box-shadow: 0 8px 20px rgba(201, 169, 97, 0.3);
     }
 
     .btn-outline {
         padding: 1rem 2.5rem;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: #fff;
+        border: 1px solid rgba(201, 169, 97, 0.4);
+        color: #f5e6d3;
         font-weight: 400;
         font-size: 0.875rem;
         letter-spacing: 0.05em;
@@ -95,5 +100,6 @@
     .btn-outline:hover {
         border-color: var(--luxury-gold);
         color: var(--luxury-gold);
+        background-color: rgba(201, 169, 97, 0.1);
     }
 }
