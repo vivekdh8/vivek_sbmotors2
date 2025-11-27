@@ -15,6 +15,9 @@ const Footer = () => {
                         <p className="text-sm leading-relaxed mb-6">
                             North Karnataka's trusted dealership for pre-owned vehicles.
                         </p>
+                        <blockquote className="border-l-2 border-luxury-gold pl-4 italic text-sm text-gray-400">
+                            "Loyalty is a two-way street. If I'm asking you for it, then you're getting it back from me."
+                        </blockquote>
                     </div>
 
                     {/* Quick Links */}

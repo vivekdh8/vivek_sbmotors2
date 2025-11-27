@@ -33,9 +33,21 @@ const AdminDashboard = () => {
         fuel: 'Petrol', transmission: 'Manual', type: 'sedan', image: '', description: ''
     });
 
+    const [socialLinks, setSocialLinks] = useState({
+        facebook_url: '',
+        whatsapp_url: '',
+        instagram_url: ''
+    });
+
     useEffect(() => {
         checkAuth();
     }, []);
+
+    useEffect(() => {
+        if (activeTab === 'website') {
+            loadSocialLinks();
+        }
+    }, [activeTab]);
 
     const checkAuth = async () => {
         try {
@@ -125,6 +137,35 @@ const AdminDashboard = () => {
             }
         } catch (err) {
             alert('Failed to upload video');
+        }
+    };
+
+    const loadSocialLinks = async () => {
+        try {
+            const res = await fetch(`${API_BASE}/api/settings/social-links`);
+            const data = await res.json();
+            setSocialLinks(data);
+        } catch (err) {
+            console.error('Failed to load social links:', err);
+        }
+    };
+
+    const handleSaveSocialLinks = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const res = await fetch(`${API_BASE}/api/employee/social-links`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify(socialLinks)
+            });
+            if (res.ok) {
+                alert('Social media links saved successfully!');
+            } else {
+                alert('Failed to save social links');
+            }
+        } catch (err) {
+            alert('Failed to save social links');
         }
     };
 
@@ -586,6 +627,95 @@ const AdminDashboard = () => {
                                     <p className="text-white font-medium mb-2">Click to upload video</p>
                                     <p className="text-xs text-gray-500">MP4 or WebM</p>
                                 </div>
+                            </div>
+
+                            <div className="glass-panel p-8 max-w-2xl mt-8">
+                                <h3 className="text-lg text-white mb-4">Company Logo</h3>
+                                <p className="text-sm text-gray-500 mb-6">
+                                    Upload your company logo to display in the navigation and footer.
+                                </p>
+
+                                <div className="border-2 border-dashed border-white/10 rounded-lg p-8 text-center hover:border-luxury-gold transition cursor-pointer relative">
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={async (e) => {
+                                            const file = e.target.files?.[0];
+                                            if (!file) return;
+                                            const formData = new FormData();
+                                            formData.append('file', file);
+                                            try {
+                                                const res = await fetch(`${API_BASE}/api/employee/upload-logo`, {
+                                                    method: 'POST',
+                                                    body: formData,
+                                                    credentials: 'include'
+                                                });
+                                                if (res.ok) {
+                                                    alert('Logo uploaded successfully!');
+                                                    window.location.reload();
+                                                } else {
+                                                    alert('Failed to upload logo');
+                                                }
+                                            } catch (err) {
+                                                alert('Failed to upload logo');
+                                            }
+                                        }}
+                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                    />
+                                    <Upload className="w-10 h-10 text-gray-500 mx-auto mb-4" />
+                                    <p className="text-white font-medium mb-2">Click to upload logo</p>
+                                    <p className="text-xs text-gray-500">PNG, JPG, or SVG (recommended: 200x200px)</p>
+                                </div>
+                            </div>
+
+                            <div className="glass-panel p-8 max-w-2xl mt-8">
+
+                                <h3 className="text-lg text-white mb-4">Social Media Links</h3>
+                                <p className="text-sm text-gray-500 mb-6">
+                                    Add your social media links to display on the Contact page.
+                                </p>
+
+                                <form onSubmit={handleSaveSocialLinks} className="space-y-4">
+                                    <div>
+                                        <label className="text-sm text-gray-400 mb-2 block">Facebook URL</label>
+                                        <input
+                                            type="url"
+                                            value={socialLinks.facebook_url}
+                                            onChange={(e) => setSocialLinks({ ...socialLinks, facebook_url: e.target.value })}
+                                            className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white focus:border-luxury-gold outline-none transition"
+                                            placeholder="https://facebook.com/yourpage"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="text-sm text-gray-400 mb-2 block">WhatsApp Number (with country code)</label>
+                                        <input
+                                            type="text"
+                                            value={socialLinks.whatsapp_url}
+                                            onChange={(e) => setSocialLinks({ ...socialLinks, whatsapp_url: e.target.value })}
+                                            className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white focus:border-luxury-gold outline-none transition"
+                                            placeholder="919876543210"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="text-sm text-gray-400 mb-2 block">Instagram URL</label>
+                                        <input
+                                            type="url"
+                                            value={socialLinks.instagram_url}
+                                            onChange={(e) => setSocialLinks({ ...socialLinks, instagram_url: e.target.value })}
+                                            className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white focus:border-luxury-gold outline-none transition"
+                                            placeholder="https://instagram.com/yourprofile"
+                                        />
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        className="btn-gold w-full"
+                                    >
+                                        Save Social Links
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     )}

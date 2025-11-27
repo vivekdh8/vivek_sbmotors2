@@ -1,9 +1,28 @@
-import React from 'react';
-import { MapPin, Phone, Mail, ArrowRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { MapPin, Phone, Mail, ArrowRight, Facebook, Instagram, MessageCircle } from 'lucide-react';
 
 const API_BASE = 'http://localhost:8000/api';
 
 const Contact = () => {
+    const [socialLinks, setSocialLinks] = useState({
+        facebook_url: '',
+        whatsapp_url: '',
+        instagram_url: ''
+    });
+
+    useEffect(() => {
+        const fetchSocialLinks = async () => {
+            try {
+                const res = await fetch('http://localhost:8000/api/settings/social-links');
+                const data = await res.json();
+                setSocialLinks(data);
+            } catch (err) {
+                console.error('Failed to load social links:', err);
+            }
+        };
+        fetchSocialLinks();
+    }, []);
+
     const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const data = Object.fromEntries(new FormData(e.currentTarget));
@@ -74,6 +93,45 @@ const Contact = () => {
                                     <p className="text-gray-500 font-light">sharanu.ratkal@sbmotors.in</p>
                                 </div>
                             </div>
+
+                            {/* Social Media Links */}
+                            {(socialLinks.facebook_url || socialLinks.whatsapp_url || socialLinks.instagram_url) && (
+                                <div className="pt-8 border-t border-white/10">
+                                    <h3 className="font-serif text-xl text-white mb-6">Connect With Us</h3>
+                                    <div className="flex gap-4">
+                                        {socialLinks.facebook_url && (
+                                            <a
+                                                href={socialLinks.facebook_url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="p-4 rounded-full border border-white/10 hover:border-luxury-gold hover:bg-luxury-gold/10 transition duration-500 group"
+                                            >
+                                                <Facebook className="w-6 h-6 text-luxury-gold group-hover:scale-110 transition" />
+                                            </a>
+                                        )}
+                                        {socialLinks.whatsapp_url && (
+                                            <a
+                                                href={`https://wa.me/${socialLinks.whatsapp_url}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="p-4 rounded-full border border-white/10 hover:border-luxury-gold hover:bg-luxury-gold/10 transition duration-500 group"
+                                            >
+                                                <MessageCircle className="w-6 h-6 text-luxury-gold group-hover:scale-110 transition" />
+                                            </a>
+                                        )}
+                                        {socialLinks.instagram_url && (
+                                            <a
+                                                href={socialLinks.instagram_url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="p-4 rounded-full border border-white/10 hover:border-luxury-gold hover:bg-luxury-gold/10 transition duration-500 group"
+                                            >
+                                                <Instagram className="w-6 h-6 text-luxury-gold group-hover:scale-110 transition" />
+                                            </a>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
 

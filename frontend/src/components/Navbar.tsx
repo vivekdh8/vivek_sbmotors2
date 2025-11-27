@@ -13,6 +13,7 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ user, cartCount, logout, openLogin, openCart }) => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+    const [logoUrl, setLogoUrl] = useState<string | null>(null);
     const location = useLocation();
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -30,13 +31,32 @@ const Navbar: React.FC<NavbarProps> = ({ user, cartCount, logout, openLogin, ope
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    useEffect(() => {
+        const fetchLogo = async () => {
+            try {
+                const res = await fetch('http://localhost:8000/api/settings/logo');
+                const data = await res.json();
+                if (data.logo_url) {
+                    setLogoUrl(`http://localhost:8000${data.logo_url}`);
+                }
+            } catch (err) {
+                console.error('Failed to load logo:', err);
+            }
+        };
+        fetchLogo();
+    }, []);
+
     return (
-        <header className="fixed w-full top-0 z-50 bg-luxury-black/80 backdrop-blur-xl border-b border-white/5">
+        <header className="fixed w-full top-0 z-50 bg-[#1a0f11]/95 backdrop-blur-xl border-b border-luxury-gold/10">
             <div className="max-w-7xl mx-auto px-6 flex justify-between items-center h-20">
 
                 {/* Logo */}
                 <Link to="/" className="flex items-center gap-3">
-                    <span className="text-2xl font-serif tracking-wide">SB Motors</span>
+                    {logoUrl ? (
+                        <img src={logoUrl} alt="SB Motors" className="h-12 w-auto" />
+                    ) : (
+                        <span className="text-2xl font-serif tracking-wide">SB Motors</span>
+                    )}
                 </Link>
 
                 {/* Desktop Nav */}

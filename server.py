@@ -1724,6 +1724,96 @@ def get_hero_video():
         return {"video_url": row.iloc[0]["value"]}
     return {"video_url": None}
 
+class SocialLinksRequest(BaseModel):
+    facebook_url: str = ""
+    whatsapp_url: str = ""
+    instagram_url: str = ""
+
+@app.post("/api/employee/social-links")
+def save_social_links(request: Request, links: SocialLinksRequest):
+    """Save social media links (employee auth required)"""
+    try:
+        employee_required(request)
+    except HTTPException:
+        return JSONResponse(status_code=401, content={"message": "Unauthorized"})
+    
+    settings = read_table(SETTINGS_TABLE)
+    
+    # Update or add each social link
+    for key, value in [("facebook_url", links.facebook_url), 
+                       ("whatsapp_url", links.whatsapp_url), 
+                       ("instagram_url", links.instagram_url)]:
+        # Remove old if exists
+        settings = settings[settings["key"] != key]
+        # Add new
+        if value:  # Only add if not empty
+            new_setting = {"key": key, "value": value}
+            settings = pd.concat([settings, pd.DataFrame([new_setting])], ignore_index=True)
+    
+    write_table(SETTINGS_TABLE, settings)
+    return {"message": "Social links saved successfully"}
+
+@app.get("/api/settings/social-links")
+def get_social_links():
+    """Get social media links (public endpoint)"""
+    settings = read_table(SETTINGS_TABLE)
+    
+    result = {
+        "facebook_url": "",
+        "whatsapp_url": "",
+        "instagram_url": ""
+    }
+    
+    for key in result.keys():
+        row = settings[settings["key"] == key]
+        if not row.empty:
+            result[key] = row.iloc[0]["value"]
+    
+    return result
+
+@app.post("/api/employee/upload-logo")
+async def upload_logo(request: Request, file: UploadFile = File(...)):
+    """Upload company logo (employee auth required)"""
+    try:
+        employee_required(request)
+    except HTTPException:
+        return JSONResponse(status_code=401, content={"message": "Unauthorized"})
+    
+    # Create logos directory if it doesn't exist
+    Path("static/logos").mkdir(parents=True, exist_ok=True)
+    
+    # Generate filename
+    file_ext = Path(file.filename).suffix
+    filename = f"logo{file_ext}"
+    file_path = Path("static/logos") / filename
+    
+    # Save file
+    with file_path.open("wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    
+    # Store logo URL in settings
+    logo_url = f"/static/logos/{filename}"
+    
+    settings = read_table(SETTINGS_TABLE)
+    # Remove old if exists
+    settings = settings[settings["key"] != "logo_url"]
+    # Add new
+    new_setting = {"key": "logo_url", "value": logo_url}
+    settings = pd.concat([settings, pd.DataFrame([new_setting])], ignore_index=True)
+    write_table(SETTINGS_TABLE, settings)
+    
+    return {"url": logo_url, "filename": filename}
+
+@app.get("/api/settings/logo")
+def get_logo():
+    """Get logo URL (public endpoint)"""
+    settings = read_table(SETTINGS_TABLE)
+    row = settings[settings["key"] == "logo_url"]
+    
+    if not row.empty:
+        return {"logo_url": row.iloc[0]["value"]}
+    return {"logo_url": None}
+
 if __name__ == '__main__':
     import uvicorn
     uvicorn.run(app, host='127.0.0.1', port=8000)

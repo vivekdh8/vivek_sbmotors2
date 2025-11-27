@@ -67,8 +67,8 @@ const EmployeeLogin = () => {
                                 <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-600" />
                                 <input
                                     type="text"
-                                    name="username"
-                                    autoComplete="username"
+                                    name="employee-username"
+                                    autoComplete="off"
                                     value={username}
                                     onChange={(e) => setUsername(e.target.value)}
                                     required
@@ -84,8 +84,8 @@ const EmployeeLogin = () => {
                                 <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-600" />
                                 <input
                                     type="password"
-                                    name="password"
-                                    autoComplete="current-password"
+                                    name="employee-password"
+                                    autoComplete="off"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
