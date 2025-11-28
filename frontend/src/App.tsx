@@ -155,7 +155,7 @@ const App = () => {
 
   return (
     <Router>
-      <div className="min-h-screen flex flex-col font-sans text-gray-900">
+      <div className="min-h-screen flex flex-col font-sans text-gray-900" style={{ backgroundColor: '#f2f0ea' }}>
         <Navbar
           user={user}
           cartCount={cart.length}
@@ -182,29 +182,45 @@ const App = () => {
 
         {/* Login/Register Modal */}
         {isLoginOpen && (
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setIsLoginOpen(false)}>
-            <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl" onClick={e => e.stopPropagation()}>
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold">{authMode === 'login' ? 'Welcome Back' : 'Create Account'}</h2>
-                <button onClick={() => setIsLoginOpen(false)}><X className="w-6 h-6 text-gray-400" /></button>
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setIsLoginOpen(false)}>
+            <div className="bg-[#56453E] w-full max-w-md p-10 rounded-xl shadow-2xl relative border border-white/10" onClick={e => e.stopPropagation()}>
+              <button
+                onClick={() => setIsLoginOpen(false)}
+                className="absolute top-4 right-4 text-gray-400 hover:text-white transition"
+              >
+                <X className="w-6 h-6" />
+              </button>
+
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-serif text-white mb-2">{authMode === 'login' ? 'Welcome Back' : 'Join the Club'}</h2>
+                <p className="text-gray-400 text-sm">Access your personalized luxury experience</p>
               </div>
 
-              <form onSubmit={handleAuth} className="space-y-4">
+              <form onSubmit={handleAuth} className="space-y-5">
                 {authMode === 'register' && (
-                  <input name="name" placeholder="Full Name" required className="w-full p-3 bg-gray-50 rounded-lg border focus:border-blue-500 outline-none" />
+                  <div>
+                    <label className="text-xs uppercase tracking-widest text-gray-400 font-medium mb-2 block">Full Name</label>
+                    <input name="name" placeholder="John Doe" required className="input-luxury-dark rounded-lg" />
+                  </div>
                 )}
-                <input name="phone" placeholder="Phone Number" required className="w-full p-3 bg-gray-50 rounded-lg border focus:border-blue-500 outline-none" />
-                <input name="password" type="password" placeholder="Password" required className="w-full p-3 bg-gray-50 rounded-lg border focus:border-blue-500 outline-none" />
+                <div>
+                  <label className="text-xs uppercase tracking-widest text-gray-400 font-medium mb-2 block">Phone Number</label>
+                  <input name="phone" placeholder="+91 98765 43210" required className="input-luxury-dark rounded-lg" />
+                </div>
+                <div>
+                  <label className="text-xs uppercase tracking-widest text-gray-400 font-medium mb-2 block">Password</label>
+                  <input name="password" type="password" placeholder="••••••••" required className="input-luxury-dark rounded-lg" />
+                </div>
 
-                <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition">
-                  {authMode === 'login' ? 'Login' : 'Register'}
+                <button type="submit" className="w-full btn-gold py-3 rounded-lg shadow-lg shadow-luxury-gold/20 hover:shadow-luxury-gold/40 mt-2">
+                  {authMode === 'login' ? 'Login' : 'Create Account'}
                 </button>
               </form>
 
-              <div className="mt-6 text-center text-sm text-gray-500">
-                {authMode === 'login' ? "Don't have an account? " : "Already have an account? "}
-                <button onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')} className="text-blue-600 font-bold hover:underline">
-                  {authMode === 'login' ? 'Sign Up' : 'Login'}
+              <div className="mt-8 text-center text-sm text-gray-500">
+                {authMode === 'login' ? "Not a member yet? " : "Already a member? "}
+                <button onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')} className="text-luxury-gold hover:text-white transition font-medium">
+                  {authMode === 'login' ? 'Register Now' : 'Login'}
                 </button>
               </div>
             </div>

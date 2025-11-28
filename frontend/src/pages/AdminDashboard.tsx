@@ -133,10 +133,11 @@ const AdminDashboard = () => {
             if (res.ok) {
                 alert('Hero video uploaded successfully!');
             } else {
-                alert('Failed to upload video');
+                const data = await res.json();
+                alert(`Failed to upload video: ${data.message || res.statusText}`);
             }
         } catch (err) {
-            alert('Failed to upload video');
+            alert(`Failed to upload video: ${err}`);
         }
     };
 
@@ -275,7 +276,7 @@ const AdminDashboard = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-luxury-black flex items-center justify-center">
+            <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#f2f0ea' }}>
                 <div className="text-xl text-luxury-gold">Loading...</div>
             </div>
         );
@@ -286,17 +287,17 @@ const AdminDashboard = () => {
     }
 
     return (
-        <div className="min-h-screen bg-luxury-black text-gray-400">
+        <div className="min-h-screen text-luxury-text" style={{ backgroundColor: '#f2f0ea' }}>
             {/* Header */}
-            <header className="bg-luxury-charcoal/50 border-b border-white/5 sticky top-0 z-10">
+            <header className="bg-[#4A4743] border-b border-white/10 sticky top-0 z-10 shadow-md">
                 <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
                     <div>
                         <h1 className="text-xl font-serif text-white">Admin Dashboard</h1>
-                        <p className="text-xs text-gray-500">Welcome, {employeeName}</p>
+                        <p className="text-xs text-white/60">Welcome, {employeeName}</p>
                     </div>
                     <button
                         onClick={handleLogout}
-                        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-400 hover:text-white transition"
+                        className="flex items-center gap-2 px-4 py-2 text-sm text-white/80 hover:text-white transition"
                     >
                         <LogOut className="w-4 h-4" />
                         Logout
@@ -315,10 +316,10 @@ const AdminDashboard = () => {
                             { label: 'Requests', value: stats.pending_sell_requests, icon: FileText },
                             { label: 'Services', value: stats.pending_services, icon: Wrench }
                         ].map((stat, i) => (
-                            <div key={i} className="glass-panel p-6">
+                            <div key={i} className="p-6 rounded-xl shadow-lg border border-white/10" style={{ backgroundColor: '#56453E' }}>
                                 <stat.icon className="w-5 h-5 text-luxury-gold mb-3" />
                                 <div className="text-2xl font-serif text-white mb-1">{stat.value}</div>
-                                <div className="text-xs text-gray-500">{stat.label}</div>
+                                <div className="text-xs text-white/60">{stat.label}</div>
                             </div>
                         ))}
                     </div>
@@ -353,7 +354,7 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Content */}
-                <div className="glass-panel p-8 mb-12 min-h-[400px]">
+                <div className="p-8 mb-12 min-h-[400px] rounded-xl shadow-xl border border-white/10" style={{ backgroundColor: '#56453E' }}>
                     {activeTab === 'cars' && (
                         <div>
                             <div className="flex justify-between items-center mb-8">
@@ -451,7 +452,7 @@ const AdminDashboard = () => {
                             <div className="overflow-x-auto">
                                 <table className="w-full text-left">
                                     <thead>
-                                        <tr className="border-b border-white/10 text-xs text-gray-500">
+                                        <tr className="border-b border-white/10 text-xs text-white/60">
                                             <th className="px-4 py-3 font-normal">Image</th>
                                             <th className="px-4 py-3 font-normal">Vehicle</th>
                                             <th className="px-4 py-3 font-normal">Year</th>
@@ -508,7 +509,7 @@ const AdminDashboard = () => {
                             <div className="overflow-x-auto">
                                 <table className="w-full text-left">
                                     <thead>
-                                        <tr className="border-b border-white/10 text-xs text-gray-500">
+                                        <tr className="border-b border-white/10 text-xs text-white/60">
                                             <th className="px-4 py-3 font-normal">Order ID</th>
                                             <th className="px-4 py-3 font-normal">Vehicle</th>
                                             <th className="px-4 py-3 font-normal">Price</th>
@@ -558,58 +559,10 @@ const AdminDashboard = () => {
                         </div>
                     )}
 
-                    {activeTab === 'services' && (
-                        <div>
-                            <h2 className="text-xl font-serif text-white mb-8">Service Bookings</h2>
-                            <div className="space-y-4">
-                                {services.map(svc => (
-                                    <div key={svc.service_id} className="p-6 bg-white/5 border border-white/10 flex justify-between items-start">
-                                        <div>
-                                            <div className="text-white mb-1">{svc.owner_name}</div>
-                                            <div className="text-xs text-gray-500 mb-2">{svc.phone} • {svc.service_date || 'Date pending'}</div>
-                                            <div className="text-sm text-gray-400">{svc.notes}</div>
-                                        </div>
-                                        <select
-                                            value={svc.status}
-                                            onChange={(e) => handleUpdateStatus('services', svc.service_id, e.target.value)}
-                                            className="bg-luxury-black border border-white/10 text-xs text-gray-300 p-1 outline-none"
-                                        >
-                                            <option value="pending">Pending</option>
-                                            <option value="scheduled">Scheduled</option>
-                                            <option value="completed">Completed</option>
-                                        </select>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
-                    {activeTab === 'contacts' && (
-                        <div>
-                            <h2 className="text-xl font-serif text-white mb-8">Contact Messages</h2>
-                            <div className="space-y-4">
-                                {contacts.map(contact => (
-                                    <div key={contact.contact_id} className="p-6 bg-white/5 border border-white/10">
-                                        <div className="flex justify-between items-start mb-4">
-                                            <div>
-                                                <div className="text-white">{contact.name}</div>
-                                                <div className="text-sm text-luxury-gold">{contact.email}</div>
-                                            </div>
-                                            <div className="text-xs text-gray-500">
-                                                {new Date(contact.timestamp).toLocaleDateString()}
-                                            </div>
-                                        </div>
-                                        <p className="text-gray-400">{contact.message}</p>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
                     {activeTab === 'website' && (
                         <div>
                             <h2 className="text-xl font-serif text-white mb-8">Website Management</h2>
-                            <div className="glass-panel p-8 max-w-2xl">
+                            <div className="border border-white/10 rounded-xl p-8 max-w-2xl" style={{ backgroundColor: '#56453E' }}>
                                 <h3 className="text-lg text-white mb-4">Home Page Hero Video</h3>
                                 <p className="text-sm text-gray-500 mb-6">
                                     Upload a video to play in the background of the home page hero section.
@@ -629,7 +582,7 @@ const AdminDashboard = () => {
                                 </div>
                             </div>
 
-                            <div className="glass-panel p-8 max-w-2xl mt-8">
+                            <div className="border border-white/10 rounded-xl p-8 max-w-2xl mt-8" style={{ backgroundColor: '#56453E' }}>
                                 <h3 className="text-lg text-white mb-4">Company Logo</h3>
                                 <p className="text-sm text-gray-500 mb-6">
                                     Upload your company logo to display in the navigation and footer.
@@ -668,7 +621,7 @@ const AdminDashboard = () => {
                                 </div>
                             </div>
 
-                            <div className="glass-panel p-8 max-w-2xl mt-8">
+                            <div className="border border-white/10 rounded-xl p-8 max-w-2xl mt-8" style={{ backgroundColor: '#56453E' }}>
 
                                 <h3 className="text-lg text-white mb-4">Social Media Links</h3>
                                 <p className="text-sm text-gray-500 mb-6">

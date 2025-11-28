@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     LayoutDashboard, Car, ShoppingBag, FileText, Wrench,
-    Mail, Users, LogOut, Plus, Edit2, Trash2, Check, X,
-    Upload, Image as ImageIcon
+    Mail, LogOut, Plus, Trash2, Check, X
 } from 'lucide-react';
 
 const API_BASE = 'http://localhost:8000';
@@ -37,7 +36,7 @@ const EmployeeDashboard = () => {
     const [loading, setLoading] = useState(true);
     const [authenticated, setAuthenticated] = useState(false);
     const [employeeName, setEmployeeName] = useState('');
-    const [activeTab, setActiveTab] = useState('overview');
+    const [activeTab, setActiveTab] = useState('cars');
     const [stats, setStats] = useState<DashboardStats | null>(null);
 
     // Data states
@@ -49,8 +48,6 @@ const EmployeeDashboard = () => {
 
     // Form states
     const [showAddCarForm, setShowAddCarForm] = useState(false);
-    const [editingCar, setEditingCar] = useState<CarData | null>(null);
-    const [uploadingImage, setUploadingImage] = useState(false);
 
     useEffect(() => {
         checkAuth();
@@ -103,27 +100,6 @@ const EmployeeDashboard = () => {
         navigate('/employee-login');
     };
 
-    const handleImageUpload = async (file: File): Promise<string> => {
-        const formData = new FormData();
-        formData.append('file', file);
-
-        setUploadingImage(true);
-        try {
-            const res = await fetch(`${API_BASE}/api/employee/upload-image`, {
-                method: 'POST',
-                credentials: 'include',
-                body: formData
-            });
-            const data = await res.json();
-            return data.url;
-        } catch (err) {
-            alert('Image upload failed');
-            return '';
-        } finally {
-            setUploadingImage(false);
-        }
-    };
-
     const handleAddCar = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
@@ -144,25 +120,6 @@ const EmployeeDashboard = () => {
             }
         } catch (err) {
             alert('Failed to add car');
-        }
-    };
-
-    const handleUpdateCar = async (carId: string, updates: Partial<CarData>) => {
-        try {
-            const res = await fetch(`${API_BASE}/api/employee/cars/${carId}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-                body: JSON.stringify(updates)
-            });
-
-            if (res.ok) {
-                alert('Car updated successfully!');
-                setEditingCar(null);
-                loadDashboardData();
-            }
-        } catch (err) {
-            alert('Failed to update car');
         }
     };
 
@@ -204,7 +161,7 @@ const EmployeeDashboard = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+            <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#f2f0ea' }}>
                 <div className="text-xl text-gray-600">Loading...</div>
             </div>
         );
@@ -215,15 +172,15 @@ const EmployeeDashboard = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen" style={{ backgroundColor: '#f2f0ea' }}>
             {/* Header */}
-            <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
+            <header className="bg-luxury-puce border-b border-white/10 sticky top-0 z-10">
                 <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
                     <div className="flex items-center space-x-3">
                         <LayoutDashboard className="w-8 h-8 text-blue-600" />
                         <div>
-                            <h1 className="text-2xl font-bold text-gray-900">SB Motors Dashboard</h1>
-                            <p className="text-sm text-gray-500">Welcome, {employeeName}</p>
+                            <h1 className="text-2xl font-bold text-gray-100">SB Motors Dashboard</h1>
+                            <p className="text-sm text-gray-300">Welcome, {employeeName}</p>
                         </div>
                     </div>
                     <button
@@ -240,49 +197,49 @@ const EmployeeDashboard = () => {
             {stats && (
                 <div className="max-w-7xl mx-auto px-4 py-6">
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <div className="p-6 rounded-xl shadow-sm border border-white/10" style={{ backgroundColor: '#56453E' }}>
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-sm text-gray-500">Total Cars</p>
-                                    <p className="text-3xl font-bold text-gray-900">{stats.total_cars}</p>
+                                    <p className="text-sm text-white/80">Total Cars</p>
+                                    <p className="text-3xl font-bold text-white">{stats.total_cars}</p>
                                 </div>
-                                <Car className="w-10 h-10 text-blue-500" />
+                                <Car className="w-10 h-10 text-luxury-gold" />
                             </div>
                         </div>
-                        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <div className="p-6 rounded-xl shadow-sm border border-white/10" style={{ backgroundColor: '#56453E' }}>
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-sm text-gray-500">Available</p>
-                                    <p className="text-3xl font-bold text-green-600">{stats.available_cars}</p>
+                                    <p className="text-sm text-white/80">Available</p>
+                                    <p className="text-3xl font-bold text-white">{stats.available_cars}</p>
                                 </div>
-                                <Check className="w-10 h-10 text-green-500" />
+                                <Check className="w-10 h-10 text-green-400" />
                             </div>
                         </div>
-                        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <div className="p-6 rounded-xl shadow-sm border border-white/10" style={{ backgroundColor: '#56453E' }}>
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-sm text-gray-500">Total Sales</p>
-                                    <p className="text-3xl font-bold text-purple-600">{stats.total_sales}</p>
+                                    <p className="text-sm text-white/80">Total Sales</p>
+                                    <p className="text-3xl font-bold text-white">{stats.total_sales}</p>
                                 </div>
-                                <ShoppingBag className="w-10 h-10 text-purple-500" />
+                                <ShoppingBag className="w-10 h-10 text-purple-300" />
                             </div>
                         </div>
-                        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <div className="p-6 rounded-xl shadow-sm border border-white/10" style={{ backgroundColor: '#56453E' }}>
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-sm text-gray-500">Sell Requests</p>
-                                    <p className="text-3xl font-bold text-orange-600">{stats.pending_sell_requests}</p>
+                                    <p className="text-sm text-white/80">Sell Requests</p>
+                                    <p className="text-3xl font-bold text-white">{stats.pending_sell_requests}</p>
                                 </div>
-                                <FileText className="w-10 h-10 text-orange-500" />
+                                <FileText className="w-10 h-10 text-orange-300" />
                             </div>
                         </div>
-                        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <div className="p-6 rounded-xl shadow-sm border border-white/10" style={{ backgroundColor: '#56453E' }}>
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-sm text-gray-500">Services</p>
-                                    <p className="text-3xl font-bold text-indigo-600">{stats.pending_services}</p>
+                                    <p className="text-sm text-white/80">Services</p>
+                                    <p className="text-3xl font-bold text-white">{stats.pending_services}</p>
                                 </div>
-                                <Wrench className="w-10 h-10 text-indigo-500" />
+                                <Wrench className="w-10 h-10 text-indigo-300" />
                             </div>
                         </div>
                     </div>
@@ -291,7 +248,7 @@ const EmployeeDashboard = () => {
 
             {/* Tabs */}
             <div className="max-w-7xl mx-auto px-4">
-                <div className="bg-white rounded-t-xl border-b border-gray-200">
+                <div className="rounded-t-xl border-b border-white/10" style={{ backgroundColor: '#56453E' }}>
                     <div className="flex space-x-1 overflow-x-auto">
                         {[
                             { id: 'cars', label: 'Cars', icon: Car },
@@ -304,8 +261,8 @@ const EmployeeDashboard = () => {
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
                                 className={`flex items-center space-x-2 px-6 py-4 font-medium transition ${activeTab === tab.id
-                                        ? 'text-blue-600 border-b-2 border-blue-600'
-                                        : 'text-gray-500 hover:text-gray-700'
+                                    ? 'text-white border-b-2 border-luxury-gold bg-white/10'
+                                    : 'text-white/70 hover:text-white hover:bg-white/5'
                                     }`}
                             >
                                 <tab.icon className="w-5 h-5" />
@@ -316,7 +273,7 @@ const EmployeeDashboard = () => {
                 </div>
 
                 {/* Tab Content */}
-                <div className="bg-white rounded-b-xl shadow-sm p-6 mb-8">
+                <div className="rounded-b-xl shadow-sm p-6 mb-8" style={{ backgroundColor: '#f2f0ea' }}>
                     {activeTab === 'cars' && (
                         <div>
                             <div className="flex justify-between items-center mb-6">
@@ -333,41 +290,41 @@ const EmployeeDashboard = () => {
                             {/* Add Car Form Modal */}
                             {showAddCarForm && (
                                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-                                    <div className="bg-white rounded-xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                                    <div className="rounded-xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto" style={{ backgroundColor: '#56453E' }}>
                                         <div className="flex justify-between items-center mb-4">
-                                            <h3 className="text-xl font-bold">Add New Car</h3>
+                                            <h3 className="text-xl font-bold text-white">Add New Car</h3>
                                             <button onClick={() => setShowAddCarForm(false)}>
-                                                <X className="w-6 h-6" />
+                                                <X className="w-6 h-6 text-white" />
                                             </button>
                                         </div>
                                         <form onSubmit={handleAddCar} className="space-y-4">
                                             <div className="grid grid-cols-2 gap-4">
-                                                <input name="make" placeholder="Make" required className="p-3 border rounded-lg" />
-                                                <input name="model" placeholder="Model" required className="p-3 border rounded-lg" />
-                                                <input name="year" type="number" placeholder="Year" required className="p-3 border rounded-lg" />
-                                                <input name="price" type="number" placeholder="Price" required className="p-3 border rounded-lg" />
-                                                <input name="mileage" type="number" placeholder="Mileage (km)" required className="p-3 border rounded-lg" />
-                                                <select name="fuel" className="p-3 border rounded-lg">
+                                                <input name="make" placeholder="Make" required className="p-3 border border-white/20 rounded-lg text-white" style={{ backgroundColor: '#3d3530' }} />
+                                                <input name="model" placeholder="Model" required className="p-3 border border-white/20 rounded-lg text-white" style={{ backgroundColor: '#3d3530' }} />
+                                                <input name="year" type="number" placeholder="Year" required className="p-3 border border-white/20 rounded-lg text-white" style={{ backgroundColor: '#3d3530' }} />
+                                                <input name="price" type="number" placeholder="Price" required className="p-3 border border-white/20 rounded-lg text-white" style={{ backgroundColor: '#3d3530' }} />
+                                                <input name="mileage" type="number" placeholder="Mileage (km)" required className="p-3 border border-white/20 rounded-lg text-white" style={{ backgroundColor: '#3d3530' }} />
+                                                <select name="fuel" className="p-3 border border-white/20 rounded-lg text-white" style={{ backgroundColor: '#3d3530' }}>
                                                     <option value="Petrol">Petrol</option>
                                                     <option value="Diesel">Diesel</option>
                                                     <option value="Electric">Electric</option>
                                                     <option value="Hybrid">Hybrid</option>
                                                 </select>
-                                                <select name="transmission" className="p-3 border rounded-lg">
+                                                <select name="transmission" className="p-3 border border-white/20 rounded-lg text-white" style={{ backgroundColor: '#3d3530' }}>
                                                     <option value="Manual">Manual</option>
                                                     <option value="Automatic">Automatic</option>
                                                 </select>
-                                                <select name="type" className="p-3 border rounded-lg">
+                                                <select name="type" className="p-3 border border-white/20 rounded-lg text-white" style={{ backgroundColor: '#3d3530' }}>
                                                     <option value="sedan">Sedan</option>
                                                     <option value="suv">SUV</option>
                                                     <option value="hatchback">Hatchback</option>
                                                     <option value="luxury">Luxury</option>
                                                 </select>
                                             </div>
-                                            <input name="owner" placeholder="Owner (e.g., 1st Owner)" className="w-full p-3 border rounded-lg" />
-                                            <input name="image" placeholder="Image URL" className="w-full p-3 border rounded-lg" />
-                                            <textarea name="description" placeholder="Description" rows={3} className="w-full p-3 border rounded-lg"></textarea>
-                                            <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700">
+                                            <input name="owner" placeholder="Owner (e.g., 1st Owner)" className="w-full p-3 border border-white/20 rounded-lg text-white" style={{ backgroundColor: '#3d3530' }} />
+                                            <input name="image" placeholder="Image URL" className="w-full p-3 border border-white/20 rounded-lg text-white" style={{ backgroundColor: '#3d3530' }} />
+                                            <textarea name="description" placeholder="Description" rows={3} className="w-full p-3 border border-white/20 rounded-lg text-white" style={{ backgroundColor: '#3d3530' }}></textarea>
+                                            <button type="submit" className="w-full bg-luxury-puce text-white py-3 rounded-lg font-semibold hover:opacity-90">
                                                 Add Car
                                             </button>
                                         </form>
@@ -376,188 +333,178 @@ const EmployeeDashboard = () => {
                             )}
 
                             {/* Cars Table */}
-                            <div className="overflow-x-auto">
-                                <table className="w-full">
-                                    <thead className="bg-gray-50">
-                                        <tr>
-                                            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">ID</th>
-                                            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Car</th>
-                                            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Year</th>
-                                            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Price</th>
-                                            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Mileage</th>
-                                            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
-                                            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-gray-200">
-                                        {cars.map(car => (
-                                            <tr key={car.id} className="hover:bg-gray-50">
-                                                <td className="px-4 py-3 text-sm text-gray-600">{car.id}</td>
-                                                <td className="px-4 py-3">
-                                                    <div className="font-medium">{car.make} {car.model}</div>
-                                                    <div className="text-sm text-gray-500">{car.fuel} • {car.transmission}</div>
-                                                </td>
-                                                <td className="px-4 py-3 text-sm">{car.year}</td>
-                                                <td className="px-4 py-3 text-sm font-semibold">₹{car.price.toLocaleString()}</td>
-                                                <td className="px-4 py-3 text-sm">{car.mileage.toLocaleString()} km</td>
-                                                <td className="px-4 py-3">
-                                                    <span className={`px-2 py-1 text-xs rounded-full ${car.status === 'available' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
-                                                        }`}>
-                                                        {car.status}
-                                                    </span>
-                                                </td>
-                                                <td className="px-4 py-3">
-                                                    <div className="flex space-x-2">
-                                                        <button
-                                                            onClick={() => setEditingCar(car)}
-                                                            className="p-2 text-blue-600 hover:bg-blue-50 rounded"
-                                                        >
-                                                            <Edit2 className="w-4 h-4" />
-                                                        </button>
-                                                        <button
-                                                            onClick={() => handleDeleteCar(car.id)}
-                                                            className="p-2 text-red-600 hover:bg-red-50 rounded"
-                                                        >
-                                                            <Trash2 className="w-4 h-4" />
-                                                        </button>
-                                                    </div>
-                                                </td>
+                            <div className="rounded-xl shadow-md overflow-hidden border border-white/10" style={{ backgroundColor: '#56453E' }}>
+                                <div className="overflow-x-auto">
+                                    <table className="w-full">
+                                        <thead className="border-b border-white/10" style={{ backgroundColor: '#56453E' }}>
+                                            <tr>
+                                                <th className="px-6 py-4 text-left text-sm font-serif font-semibold text-white">ID</th>
+                                                <th className="px-6 py-4 text-left text-sm font-serif font-semibold text-white">Car</th>
+                                                <th className="px-6 py-4 text-left text-sm font-serif font-semibold text-white">Year</th>
+                                                <th className="px-6 py-4 text-left text-sm font-serif font-semibold text-white">Price</th>
+                                                <th className="px-6 py-4 text-left text-sm font-serif font-semibold text-white">Mileage</th>
+                                                <th className="px-6 py-4 text-left text-sm font-serif font-semibold text-white">Status</th>
+                                                <th className="px-6 py-4 text-left text-sm font-serif font-semibold text-white">Actions</th>
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody className="divide-y divide-gray-100">
+                                            {cars.map(car => (
+                                                <tr key={car.id} className="hover:bg-luxury-gold/5 transition-colors">
+                                                    <td className="px-6 py-4 text-sm text-gray-300 font-mono">{car.id}</td>
+                                                    <td className="px-6 py-4">
+                                                        <div className="font-medium text-white">{car.make} {car.model}</div>
+                                                        <div className="text-xs text-gray-300 mt-1">{car.fuel} • {car.transmission}</div>
+                                                    </td>
+                                                    <td className="px-6 py-4 text-sm text-gray-300">{car.year}</td>
+                                                    <td className="px-6 py-4 text-sm font-semibold text-white">₹{car.price.toLocaleString()}</td>
+                                                    <td className="px-6 py-4 text-sm text-gray-300">{car.mileage.toLocaleString()} km</td>
+                                                    <td className="px-6 py-4">
+                                                        <span className={`px-3 py-1 text-xs font-medium rounded-full ${car.status === 'available' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                                                            }`}>
+                                                            {car.status}
+                                                        </span>
+                                                    </td>
+                                                    <td className="px-6 py-4">
+                                                        <div className="flex space-x-2">
+                                                            <button
+                                                                onClick={() => handleDeleteCar(car.id)}
+                                                                className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
+                                                            >
+                                                                <Trash2 className="w-4 h-4" />
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     )}
 
                     {activeTab === 'sales' && (
                         <div>
-                            <h2 className="text-2xl font-bold mb-6">Sales Orders</h2>
-                            <div className="overflow-x-auto">
-                                <table className="w-full">
-                                    <thead className="bg-gray-50">
-                                        <tr>
-                                            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Order ID</th>
-                                            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Car</th>
-                                            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Price</th>
-                                            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Date</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-gray-200">
-                                        {sales.map(sale => (
-                                            <tr key={sale.order_id} className="hover:bg-gray-50">
-                                                <td className="px-4 py-3 text-sm font-mono">{sale.order_id}</td>
-                                                <td className="px-4 py-3 text-sm">{sale.car_name}</td>
-                                                <td className="px-4 py-3 text-sm font-semibold">₹{sale.price.toLocaleString()}</td>
-                                                <td className="px-4 py-3 text-sm text-gray-600">{new Date(sale.timestamp).toLocaleDateString()}</td>
+                            <h2 className="text-2xl font-serif font-bold mb-6 text-luxury-text">Sales Orders</h2>
+                            <div className="rounded-xl shadow-md overflow-hidden border border-white/10" style={{ backgroundColor: '#56453E' }}>
+                                <div className="overflow-x-auto">
+                                    <table className="w-full">
+                                        <thead className="border-b border-white/10" style={{ backgroundColor: '#56453E' }}>
+                                            <tr>
+                                                <th className="px-6 py-4 text-left text-sm font-serif font-semibold text-white">Order ID</th>
+                                                <th className="px-6 py-4 text-left text-sm font-serif font-semibold text-white">Car</th>
+                                                <th className="px-6 py-4 text-left text-sm font-serif font-semibold text-white">Price</th>
+                                                <th className="px-6 py-4 text-left text-sm font-serif font-semibold text-white">Date</th>
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody className="divide-y divide-gray-100">
+                                            {sales.map(sale => (
+                                                <tr key={sale.order_id} className="hover:bg-luxury-gold/5 transition-colors">
+                                                    <td className="px-6 py-4 text-sm font-mono text-gray-300">{sale.order_id}</td>
+                                                    <td className="px-6 py-4 text-sm text-white font-medium">{sale.car_name}</td>
+                                                    <td className="px-6 py-4 text-sm font-semibold text-white">₹{sale.price.toLocaleString()}</td>
+                                                    <td className="px-6 py-4 text-sm text-gray-300">{new Date(sale.timestamp).toLocaleDateString()}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     )}
 
                     {activeTab === 'sell-requests' && (
                         <div>
-                            <h2 className="text-2xl font-bold mb-6">Sell Requests</h2>
-                            <div className="overflow-x-auto">
-                                <table className="w-full">
-                                    <thead className="bg-gray-50">
-                                        <tr>
-                                            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Owner</th>
-                                            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Car</th>
-                                            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Year</th>
-                                            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Asking Price</th>
-                                            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
-                                            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-gray-200">
-                                        {sellRequests.map(req => (
-                                            <tr key={req.request_id} className="hover:bg-gray-50">
-                                                <td className="px-4 py-3">
-                                                    <div className="font-medium">{req.owner_name}</div>
-                                                    <div className="text-sm text-gray-500">{req.phone}</div>
-                                                </td>
-                                                <td className="px-4 py-3 text-sm">{req.make} {req.model}</td>
-                                                <td className="px-4 py-3 text-sm">{req.year}</td>
-                                                <td className="px-4 py-3 text-sm font-semibold">₹{req.asking_price.toLocaleString()}</td>
-                                                <td className="px-4 py-3">
-                                                    <span className={`px-2 py-1 text-xs rounded-full ${req.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
-                                                            req.status === 'approved' ? 'bg-green-100 text-green-700' :
-                                                                'bg-red-100 text-red-700'
-                                                        }`}>
-                                                        {req.status}
-                                                    </span>
-                                                </td>
-                                                <td className="px-4 py-3">
-                                                    <select
-                                                        value={req.status}
-                                                        onChange={(e) => handleUpdateStatus('sell-requests', req.request_id, e.target.value)}
-                                                        className="text-sm border rounded px-2 py-1"
-                                                    >
-                                                        <option value="pending">Pending</option>
-                                                        <option value="approved">Approved</option>
-                                                        <option value="rejected">Rejected</option>
-                                                    </select>
-                                                </td>
+                            <h2 className="text-2xl font-serif font-bold mb-6 text-luxury-text">Sell Requests</h2>
+                            <div className="rounded-xl shadow-md overflow-hidden border border-white/10" style={{ backgroundColor: '#56453E' }}>
+                                <div className="overflow-x-auto">
+                                    <table className="w-full">
+                                        <thead className="border-b border-white/10" style={{ backgroundColor: '#56453E' }}>
+                                            <tr>
+                                                <th className="px-6 py-4 text-left text-sm font-serif font-semibold text-white">Owner</th>
+                                                <th className="px-6 py-4 text-left text-sm font-serif font-semibold text-white">Car</th>
+                                                <th className="px-6 py-4 text-left text-sm font-serif font-semibold text-white">Year</th>
+                                                <th className="px-6 py-4 text-left text-sm font-serif font-semibold text-white">Asking Price</th>
+                                                <th className="px-6 py-4 text-left text-sm font-serif font-semibold text-white">Status</th>
+                                                <th className="px-6 py-4 text-left text-sm font-serif font-semibold text-white">Actions</th>
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody className="divide-y divide-gray-100">
+                                            {sellRequests.map(req => (
+                                                <tr key={req.request_id} className="hover:bg-luxury-gold/5 transition-colors">
+                                                    <td className="px-6 py-4">
+                                                        <div className="font-medium text-white">{req.owner_name}</div>
+                                                        <div className="text-xs text-gray-300 mt-1">{req.phone}</div>
+                                                    </td>
+                                                    <td className="px-6 py-4 text-sm text-white">{req.make} {req.model}</td>
+                                                    <td className="px-6 py-4 text-sm text-gray-300">{req.year}</td>
+                                                    <td className="px-6 py-4 text-sm font-semibold text-white">₹{req.price.toLocaleString()}</td>
+                                                    <td className="px-6 py-4">
+                                                        <span className={`px-3 py-1 text-xs font-medium rounded-full ${req.status === 'pending' ? 'bg-orange-100 text-orange-800' :
+                                                            req.status === 'approved' ? 'bg-green-100 text-green-800' :
+                                                                'bg-red-100 text-red-800'
+                                                            }`}>
+                                                            {req.status}
+                                                        </span>
+                                                    </td>
+                                                    <td className="px-6 py-4">
+                                                        <div className="flex space-x-2">
+                                                            <button onClick={() => handleUpdateStatus('sell-requests', req.request_id, 'approved')} className="p-1 text-green-600 hover:bg-green-50 rounded"><Check className="w-4 h-4" /></button>
+                                                            <button onClick={() => handleUpdateStatus('sell-requests', req.request_id, 'rejected')} className="p-1 text-red-600 hover:bg-red-50 rounded"><X className="w-4 h-4" /></button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     )}
 
                     {activeTab === 'services' && (
                         <div>
-                            <h2 className="text-2xl font-bold mb-6">Service Bookings</h2>
-                            <div className="overflow-x-auto">
-                                <table className="w-full">
-                                    <thead className="bg-gray-50">
-                                        <tr>
-                                            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Customer</th>
-                                            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Car ID</th>
-                                            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Service Date</th>
-                                            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Notes</th>
-                                            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
-                                            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-gray-200">
-                                        {services.map(svc => (
-                                            <tr key={svc.service_id} className="hover:bg-gray-50">
-                                                <td className="px-4 py-3">
-                                                    <div className="font-medium">{svc.owner_name}</div>
-                                                    <div className="text-sm text-gray-500">{svc.phone}</div>
-                                                </td>
-                                                <td className="px-4 py-3 text-sm">{svc.car_id || 'N/A'}</td>
-                                                <td className="px-4 py-3 text-sm">{svc.service_date || 'Not specified'}</td>
-                                                <td className="px-4 py-3 text-sm text-gray-600">{svc.notes}</td>
-                                                <td className="px-4 py-3">
-                                                    <span className={`px-2 py-1 text-xs rounded-full ${svc.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
-                                                            svc.status === 'scheduled' ? 'bg-blue-100 text-blue-700' :
-                                                                'bg-green-100 text-green-700'
-                                                        }`}>
-                                                        {svc.status}
-                                                    </span>
-                                                </td>
-                                                <td className="px-4 py-3">
-                                                    <select
-                                                        value={svc.status}
-                                                        onChange={(e) => handleUpdateStatus('services', svc.service_id, e.target.value)}
-                                                        className="text-sm border rounded px-2 py-1"
-                                                    >
-                                                        <option value="pending">Pending</option>
-                                                        <option value="scheduled">Scheduled</option>
-                                                        <option value="completed">Completed</option>
-                                                    </select>
-                                                </td>
+                            <h2 className="text-2xl font-serif font-bold mb-6 text-luxury-text">Service Bookings</h2>
+                            <div className="rounded-xl shadow-md overflow-hidden border border-white/10" style={{ backgroundColor: '#56453E' }}>
+                                <div className="overflow-x-auto">
+                                    <table className="w-full">
+                                        <thead className="border-b border-white/10" style={{ backgroundColor: '#56453E' }}>
+                                            <tr>
+                                                <th className="px-6 py-4 text-left text-sm font-serif font-semibold text-white">Customer</th>
+                                                <th className="px-6 py-4 text-left text-sm font-serif font-semibold text-white">Service Type</th>
+                                                <th className="px-6 py-4 text-left text-sm font-serif font-semibold text-white">Date</th>
+                                                <th className="px-6 py-4 text-left text-sm font-serif font-semibold text-white">Status</th>
+                                                <th className="px-6 py-4 text-left text-sm font-serif font-semibold text-white">Actions</th>
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody className="divide-y divide-gray-100">
+                                            {services.map(service => (
+                                                <tr key={service.service_id} className="hover:bg-luxury-gold/5 transition-colors">
+                                                    <td className="px-6 py-4">
+                                                        <div className="font-medium text-white">{service.name}</div>
+                                                        <div className="text-xs text-gray-300 mt-1">{service.phone}</div>
+                                                    </td>
+                                                    <td className="px-6 py-4 text-sm text-white">{service.service_type}</td>
+                                                    <td className="px-6 py-4 text-sm text-gray-300">{new Date(service.preferred_date).toLocaleDateString()}</td>
+                                                    <td className="px-6 py-4">
+                                                        <span className={`px-3 py-1 text-xs font-medium rounded-full ${service.status === 'pending' ? 'bg-indigo-100 text-indigo-800' :
+                                                            service.status === 'completed' ? 'bg-green-100 text-green-800' :
+                                                                'bg-gray-100 text-gray-800'
+                                                            }`}>
+                                                            {service.status}
+                                                        </span>
+                                                    </td>
+                                                    <td className="px-6 py-4">
+                                                        <div className="flex space-x-2">
+                                                            <button onClick={() => handleUpdateStatus('services', service.service_id, 'completed')} className="p-1 text-green-600 hover:bg-green-50 rounded"><Check className="w-4 h-4" /></button>
+                                                            <button onClick={() => handleUpdateStatus('services', service.service_id, 'cancelled')} className="p-1 text-red-600 hover:bg-red-50 rounded"><X className="w-4 h-4" /></button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     )}
@@ -567,17 +514,17 @@ const EmployeeDashboard = () => {
                             <h2 className="text-2xl font-bold mb-6">Contact Messages</h2>
                             <div className="space-y-4">
                                 {contacts.map(contact => (
-                                    <div key={contact.contact_id} className="border rounded-lg p-4 hover:bg-gray-50">
+                                    <div key={contact.contact_id} className="border border-white/20 rounded-lg p-4" style={{ backgroundColor: '#56453E' }}>
                                         <div className="flex justify-between items-start mb-2">
                                             <div>
-                                                <div className="font-semibold">{contact.name}</div>
-                                                <div className="text-sm text-gray-500">{contact.email}</div>
+                                                <div className="font-semibold text-white">{contact.name}</div>
+                                                <div className="text-sm text-gray-300">{contact.email}</div>
                                             </div>
-                                            <div className="text-sm text-gray-500">
+                                            <div className="text-sm text-gray-300">
                                                 {new Date(contact.timestamp).toLocaleDateString()}
                                             </div>
                                         </div>
-                                        <p className="text-gray-700">{contact.message}</p>
+                                        <p className="text-gray-200">{contact.message}</p>
                                     </div>
                                 ))}
                             </div>

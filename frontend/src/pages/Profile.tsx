@@ -86,7 +86,7 @@ const Profile: React.FC<ProfileProps> = ({ user, openLogin }) => {
 
     if (loading) {
         return (
-            <div className="bg-luxury-black min-h-screen py-32 flex justify-center items-center">
+            <div className="min-h-screen py-32 flex justify-center items-center" style={{ backgroundColor: '#f2f0ea' }}>
                 <div className="w-12 h-12 border-2 border-luxury-gold border-t-transparent rounded-full animate-spin"></div>
             </div>
         );
@@ -94,7 +94,7 @@ const Profile: React.FC<ProfileProps> = ({ user, openLogin }) => {
 
     if (!profileData) {
         return (
-            <div className="bg-luxury-black min-h-screen py-32">
+            <div className="min-h-screen py-32" style={{ backgroundColor: '#f2f0ea' }}>
                 <div className="max-w-7xl mx-auto px-6 text-center">
                     <p className="text-gray-500">Failed to load profile data.</p>
                 </div>
@@ -103,7 +103,7 @@ const Profile: React.FC<ProfileProps> = ({ user, openLogin }) => {
     }
 
     return (
-        <div className="bg-luxury-black min-h-screen py-32">
+        <div className="min-h-screen py-32" style={{ backgroundColor: '#f2f0ea' }}>
             <div className="max-w-7xl mx-auto px-6">
                 {/* Profile Header */}
                 <div className="glass-panel p-8 mb-12 flex items-center space-x-8">
@@ -221,8 +221,8 @@ const Profile: React.FC<ProfileProps> = ({ user, openLogin }) => {
                                                     ₹{req.asking_price.toLocaleString()}
                                                 </p>
                                                 <span className={`inline-block px-3 py-1 border text-[10px] uppercase tracking-widest rounded-full ${req.status === 'approved' ? 'border-green-500/30 text-green-400' :
-                                                        req.status === 'pending' ? 'border-yellow-500/30 text-yellow-400' :
-                                                            'border-red-500/30 text-red-400'
+                                                    req.status === 'pending' ? 'border-yellow-500/30 text-yellow-400' :
+                                                        'border-red-500/30 text-red-400'
                                                     }`}>
                                                     {req.status}
                                                 </span>
@@ -251,8 +251,8 @@ const Profile: React.FC<ProfileProps> = ({ user, openLogin }) => {
                                                     </p>
                                                 </div>
                                                 <span className={`inline-block px-3 py-1 border text-[10px] uppercase tracking-widest rounded-full ${service.status === 'completed' ? 'border-green-500/30 text-green-400' :
-                                                        service.status === 'scheduled' ? 'border-blue-500/30 text-blue-400' :
-                                                            'border-gray-500/30 text-gray-500'
+                                                    service.status === 'scheduled' ? 'border-blue-500/30 text-blue-400' :
+                                                        'border-gray-500/30 text-gray-500'
                                                     }`}>
                                                     {service.status}
                                                 </span>

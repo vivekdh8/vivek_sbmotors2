@@ -1,5 +1,5 @@
+import React from 'react';
 import type { UserData } from '../types';
-import { Wrench, Clock, ShieldCheck } from 'lucide-react';
 
 const API_BASE = 'http://localhost:8000/api';
 
@@ -35,78 +35,69 @@ const Service: React.FC<ServiceProps> = ({ user, openLogin }) => {
     };
 
     return (
-        <div className="bg-luxury-black min-h-screen py-32 relative overflow-hidden">
-            {/* Background */}
-            <div className="absolute inset-0 z-0">
-                <div className="absolute top-0 right-0 w-2/3 h-full bg-gradient-to-l from-luxury-charcoal to-transparent opacity-50"></div>
+        <div className="min-h-screen py-32 relative overflow-hidden" style={{ backgroundColor: '#f2f0ea' }}>
+            {/* Background Elements */}
+            <div className="absolute top-0 right-0 w-full h-full overflow-hidden z-0 pointer-events-none">
+                <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-luxury-gold/5 rounded-full blur-[100px]"></div>
+                <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-900/5 rounded-full blur-[100px]"></div>
             </div>
 
             <div className="max-w-7xl mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-16 items-center">
+                <div className="space-y-8 animate-in fade-in slide-in-from-left-8">
+                    <h2 className="text-luxury-gold text-sm tracking-[0.4em] uppercase font-semibold">Service Center</h2>
+                    <h1 className="text-4xl md:text-5xl font-serif text-luxury-text leading-tight">
+                        Expert Care for Your <br />
+                        <span className="italic text-luxury-gold">Prized Possession</span>
+                    </h1>
+                    <p className="text-gray-600 font-light text-lg max-w-xl leading-relaxed">
+                        Our state-of-the-art facility is staffed by factory-trained technicians dedicated to maintaining the performance and value of your luxury vehicle.
+                    </p>
 
-                {/* Content Side */}
-                <div className="space-y-12">
-                    <div>
-                        <h2 className="text-luxury-gold text-sm tracking-[0.4em] uppercase mb-4">Aftersales</h2>
-                        <h1 className="text-5xl md:text-6xl font-serif text-white mb-6">Uncompromising Care</h1>
-                        <p className="text-gray-400 font-light leading-relaxed text-lg">
-                            Maintain the peak performance of your vehicle with our certified service center.
-                            Our master technicians use only genuine parts and state-of-the-art diagnostic equipment.
-                        </p>
-                    </div>
-
-                    <div className="space-y-8">
+                    <div className="grid grid-cols-2 gap-6 pt-4">
                         {[
-                            { icon: Wrench, title: "Master Technicians", desc: "Factory trained experts dedicated to perfection." },
-                            { icon: Clock, title: "Priority Scheduling", desc: "Exclusive time slots for our members." },
-                            { icon: ShieldCheck, title: "Genuine Parts", desc: "Only original components for lasting performance." }
+                            { title: 'Routine Maintenance', desc: 'Oil changes, filters, and inspections' },
+                            { title: 'Diagnostics', desc: 'Advanced computer-aided troubleshooting' },
+                            { title: 'Detailing', desc: 'Premium interior and exterior care' },
+                            { title: 'Performance', desc: 'Tuning and aftermarket upgrades' }
                         ].map((item, i) => (
-                            <div key={i} className="flex gap-6">
-                                <div className="w-12 h-12 rounded-full border border-luxury-gold/30 flex items-center justify-center text-luxury-gold shrink-0">
-                                    <item.icon className="w-5 h-5" />
-                                </div>
-                                <div>
-                                    <h3 className="text-white font-serif text-xl mb-2">{item.title}</h3>
-                                    <p className="text-gray-500 font-light text-sm">{item.desc}</p>
-                                </div>
+                            <div key={i} className="border border-luxury-gold/20 p-6 bg-white/50 backdrop-blur-sm hover:bg-white transition-colors duration-300">
+                                <h3 className="text-luxury-text font-serif text-lg mb-2">{item.title}</h3>
+                                <p className="text-gray-500 text-sm">{item.desc}</p>
                             </div>
                         ))}
                     </div>
                 </div>
 
-                {/* Form Side */}
-                <div className="glass-panel p-10 rounded-sm border border-white/10">
+                <div className="bg-[#56453E] p-10 rounded-xl shadow-2xl border border-white/10">
                     <h3 className="text-2xl font-serif text-white mb-8 text-center">Schedule Service</h3>
                     <form onSubmit={handleFormSubmit} className="space-y-6">
-                        <div className="grid md:grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                                <label className="text-xs uppercase tracking-widest text-gray-500">Name</label>
-                                <input name="owner_name" placeholder="Full Name" required className="w-full p-4 bg-white/5 border border-white/10 text-white focus:border-luxury-gold outline-none transition" />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-xs uppercase tracking-widest text-gray-500">Phone</label>
-                                <input name="phone" placeholder="Contact Number" required className="w-full p-4 bg-white/5 border border-white/10 text-white focus:border-luxury-gold outline-none transition" />
-                            </div>
-                        </div>
-
-                        <div className="grid md:grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                                <label className="text-xs uppercase tracking-widest text-gray-500">Vehicle ID</label>
-                                <input name="car_id" placeholder="Optional" className="w-full p-4 bg-white/5 border border-white/10 text-white focus:border-luxury-gold outline-none transition" />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-xs uppercase tracking-widest text-gray-500">Preferred Date</label>
-                                <input name="service_date" type="date" className="w-full p-4 bg-white/5 border border-white/10 text-white focus:border-luxury-gold outline-none transition [color-scheme:dark]" />
-                            </div>
-                        </div>
-
                         <div className="space-y-2">
-                            <label className="text-xs uppercase tracking-widest text-gray-500">Service Requirements</label>
-                            <textarea name="notes" placeholder="Describe issues or required maintenance..." className="w-full p-4 bg-white/5 border border-white/10 text-white focus:border-luxury-gold outline-none transition" rows={4}></textarea>
+                            <label className="text-xs uppercase tracking-widest text-white/80 font-medium">Name</label>
+                            <input name="owner_name" placeholder="Full Name" required className="input-luxury-dark rounded-lg" />
                         </div>
-
-                        <button type="submit" className="w-full btn-gold py-4 text-sm mt-4">
-                            Confirm Appointment
-                        </button>
+                        <div className="space-y-2">
+                            <label className="text-xs uppercase tracking-widest text-white/80 font-medium">Phone Number</label>
+                            <input name="phone" placeholder="+91" required className="input-luxury-dark rounded-lg" />
+                        </div>
+                        <div className="grid grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                                <label className="text-xs uppercase tracking-widest text-white/80 font-medium">Make</label>
+                                <input name="make" placeholder="Make" required className="input-luxury-dark rounded-lg" />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-xs uppercase tracking-widest text-white/80 font-medium">Model</label>
+                                <input name="model" placeholder="Model" required className="input-luxury-dark rounded-lg" />
+                            </div>
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-xs uppercase tracking-widest text-white/80 font-medium">Service Required</label>
+                            <textarea name="service_type" placeholder="Describe the issue or service needed..." className="input-luxury-dark rounded-lg" rows={3}></textarea>
+                        </div>
+                        <div className="pt-4">
+                            <button type="submit" className="w-full btn-gold py-4 text-sm rounded-lg shadow-lg shadow-luxury-gold/20 hover:shadow-luxury-gold/40">
+                                Request Appointment
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>

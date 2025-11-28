@@ -18,8 +18,8 @@ const Navbar: React.FC<NavbarProps> = ({ user, cartCount, logout, openLogin, ope
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     const isActive = (path: string) => location.pathname === path
-        ? "text-luxury-gold"
-        : "text-gray-400 hover:text-white";
+        ? "text-luxury-gold font-bold"
+        : "text-luxury-text font-medium hover:text-luxury-gold transition-colors";
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -47,16 +47,21 @@ const Navbar: React.FC<NavbarProps> = ({ user, cartCount, logout, openLogin, ope
     }, []);
 
     return (
-        <header className="fixed w-full top-0 z-50 bg-[#1a0f11]/95 backdrop-blur-xl border-b border-luxury-gold/10">
+        <header className="fixed w-full top-0 z-50 bg-luxury-beige backdrop-blur-xl border-b border-luxury-gold/20">
             <div className="max-w-7xl mx-auto px-6 flex justify-between items-center h-20">
 
                 {/* Logo */}
                 <Link to="/" className="flex items-center gap-3">
-                    {logoUrl ? (
-                        <img src={logoUrl} alt="SB Motors" className="h-12 w-auto" />
-                    ) : (
-                        <span className="text-2xl font-serif tracking-wide">SB Motors</span>
-                    )}
+                    <img
+                        src={logoUrl || "http://localhost:8000/static/logos/sbmotors-logo.png"}
+                        alt="SB Motors"
+                        className="h-12 w-auto"
+                        onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                            e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                        }}
+                    />
+                    <span className={`text-2xl font-serif tracking-wide ${logoUrl || "http://localhost:8000/static/logos/sbmotors-logo.png" ? 'hidden' : ''}`}>SB Motors</span>
                 </Link>
 
                 {/* Desktop Nav */}
@@ -70,38 +75,37 @@ const Navbar: React.FC<NavbarProps> = ({ user, cartCount, logout, openLogin, ope
                 </nav>
 
                 {/* Right Actions */}
-                <div className="hidden lg:flex items-center space-x-6">
-                    <button onClick={openCart} className="relative text-gray-400 hover:text-white transition">
-                        <ShoppingCart className="w-5 h-5" strokeWidth={1.5} />
-                        {cartCount > 0 && (
-                            <span className="absolute -top-2 -right-2 bg-luxury-gold text-black text-xs w-5 h-5 flex items-center justify-center rounded-full font-medium">
-                                {cartCount}
-                            </span>
-                        )}
-                    </button>
-
+                <div className="hidden lg:flex items-center space-x-8">
                     {user ? (
-                        <div className="relative" ref={dropdownRef}>
+                        <div className="relative group" ref={dropdownRef}>
                             <button
                                 onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                                className="flex items-center space-x-2 text-sm text-gray-400 hover:text-white transition"
+                                className="flex items-center gap-2 text-sm font-medium hover:text-luxury-gold transition"
                             >
+                                <User className="w-5 h-5" />
                                 <span>{user.name}</span>
                                 <ChevronDown className={`w-4 h-4 transition-transform ${profileDropdownOpen ? 'rotate-180' : ''}`} />
                             </button>
 
                             {profileDropdownOpen && (
-                                <div className="absolute right-0 mt-4 w-48 bg-luxury-charcoal border border-white/10 py-2">
+                                <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-2">
                                     <Link
                                         to="/profile"
                                         onClick={() => setProfileDropdownOpen(false)}
-                                        className="block px-6 py-3 text-sm text-gray-400 hover:text-white hover:bg-white/5 transition"
+                                        className="block px-4 py-3 text-sm text-gray-600 hover:bg-gray-50 first:rounded-t-xl"
                                     >
                                         Profile
                                     </Link>
+                                    <Link
+                                        to="/orders"
+                                        onClick={() => setProfileDropdownOpen(false)}
+                                        className="block px-4 py-3 text-sm text-gray-600 hover:bg-gray-50"
+                                    >
+                                        My Orders
+                                    </Link>
                                     <button
                                         onClick={() => { logout(); setProfileDropdownOpen(false); }}
-                                        className="w-full text-left px-6 py-3 text-sm text-gray-400 hover:text-white hover:bg-white/5 transition"
+                                        className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 last:rounded-b-xl"
                                     >
                                         Logout
                                     </button>
@@ -109,14 +113,24 @@ const Navbar: React.FC<NavbarProps> = ({ user, cartCount, logout, openLogin, ope
                             )}
                         </div>
                     ) : (
-                        <button onClick={openLogin} className="text-sm text-gray-400 hover:text-white transition">
-                            Login
+                        <button onClick={openLogin} className="flex items-center gap-2 text-sm font-bold text-luxury-text hover:text-luxury-gold transition">
+                            <User className="w-5 h-5" />
+                            <span>Login</span>
                         </button>
                     )}
+
+                    <button onClick={openCart} className="relative group">
+                        <ShoppingCart className="w-6 h-6 text-luxury-text group-hover:text-luxury-gold transition" />
+                        {cartCount > 0 && (
+                            <span className="absolute -top-2 -right-2 w-5 h-5 bg-luxury-gold text-white text-xs flex items-center justify-center rounded-full font-bold">
+                                {cartCount}
+                            </span>
+                        )}
+                    </button>
                 </div>
 
                 {/* Mobile Menu Button */}
-                <button className="lg:hidden text-white" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+                <button className="lg:hidden text-luxury-text" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
                     {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
                 </button>
             </div>

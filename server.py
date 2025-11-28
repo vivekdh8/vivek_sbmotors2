@@ -1703,7 +1703,7 @@ async def upload_hero_video(request: Request, file: UploadFile = File(...)):
     # Store video URL in settings
     video_url = f"/static/videos/{filename}"
     
-    settings = read_table(SETTINGS_TABLE)
+    settings = read_table(SETTINGS_TABLE, default_cols=["key", "value"])
     # remove old if exists
     settings = settings[settings["key"] != "hero_video"]
     # add new

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
     return (
-        <footer className="bg-luxury-black text-gray-500 py-16 border-t border-white/5">
+        <footer className="bg-luxury-black text-gray-300 py-16 border-t border-white/5">
             <div className="max-w-7xl mx-auto px-6">
 
                 {/* Main Footer Content */}
@@ -12,7 +12,7 @@ const Footer = () => {
                     {/* Brand */}
                     <div>
                         <h3 className="text-2xl font-serif text-white mb-4">SB Motors</h3>
-                        <p className="text-sm leading-relaxed mb-6">
+                        <p className="text-sm leading-relaxed mb-6 text-gray-400">
                             North Karnataka's trusted dealership for pre-owned vehicles.
                         </p>
                         <blockquote className="border-l-2 border-luxury-gold pl-4 italic text-sm text-gray-400">
@@ -23,7 +23,7 @@ const Footer = () => {
                     {/* Quick Links */}
                     <div>
                         <h4 className="text-white text-sm font-medium mb-4">Quick Links</h4>
-                        <ul className="space-y-3 text-sm">
+                        <ul className="space-y-3 text-sm text-gray-400">
                             <li><Link to="/buy" className="hover:text-white transition">Buy Car</Link></li>
                             <li><Link to="/sell" className="hover:text-white transition">Sell Car</Link></li>
                             <li><Link to="/service" className="hover:text-white transition">Service</Link></li>
@@ -36,7 +36,7 @@ const Footer = () => {
                     {/* Contact */}
                     <div>
                         <h4 className="text-white text-sm font-medium mb-4">Contact</h4>
-                        <ul className="space-y-3 text-sm">
+                        <ul className="space-y-3 text-sm text-gray-400">
                             <li className="flex items-start gap-3">
                                 <MapPin className="w-4 h-4 text-luxury-gold shrink-0 mt-1" />
                                 <span>Sy No 80/2 Kapnoor Industrial Area, Humnabad Road, Kalaburagi 585104</span>
@@ -54,7 +54,7 @@ const Footer = () => {
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-xs">
+                <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
                     <p>&copy; 2024 SB Motors. All rights reserved.</p>
                     <p className="mt-2 md:mt-0">Authorized Channel Partner of CARS24 | ISUZU Authorized Dealer</p>
                 </div>
